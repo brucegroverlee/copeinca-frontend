@@ -6,8 +6,8 @@ import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoub
 import { styled } from "@mui/material/styles";
 
 import { MessagesContext } from "../models/MessagesProvider";
-import { MemoizedMessage } from "./@Content/Message";
 import { useAutoScroll } from "../models/useAutoScroll";
+import { MemoizedMessage } from "./@Content/Message";
 
 const ScrollableStack = styled(Stack)(({ theme }) => ({
   height: "calc(100dvh - 52px)",
