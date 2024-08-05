@@ -16,7 +16,7 @@ const Message = ({ message }: Props) => {
         <Avatar sx={{ width: 34, height: 34, mr: 2 }}>A</Avatar>
 
         <Stack>
-          <Typography variant="subtitle2">Andrea</Typography>
+          <Typography variant="subtitle2">{"Ronald Amaya (302438)"}</Typography>
           {message.content}
         </Stack>
       </Stack>

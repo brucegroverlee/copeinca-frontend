@@ -4,8 +4,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@lib/api";
 import { MessageDto } from "./MessageDto";
 
-const USER_ID = "user_id";
-const USER_SAP_ID = 2;
+const USER_ID = "66a9ab6e4f27dde47e908140"; // "user_id";
+const USER_SAP_ID = 302438; // 2;
+const USER_NAME = "AMAYA CABALLERO RONALD ANDRES";
 // const CHAT_ID = "default";
 
 interface MessagesContextValue {
@@ -66,6 +67,7 @@ export const MessagesProvider = ({ children }: Props) => {
       const { data } = await api.post("/assistant/messages", {
         user_id: USER_ID,
         user_sap_id: USER_SAP_ID,
+        user_name: USER_NAME,
         thread_id: threadId,
         content: message,
       });
