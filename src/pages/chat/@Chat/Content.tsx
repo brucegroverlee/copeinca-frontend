@@ -33,7 +33,7 @@ export const Content = () => {
         <MemoizedMessage
           message={{
             role: "assistant",
-            message: (
+            content: (
               <>
                 <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
                 <Skeleton variant="text" sx={{ fontSize: "1rem" }} />

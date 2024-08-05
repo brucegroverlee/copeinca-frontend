@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 export interface MessageDto {
   role: "user" | "assistant";
-  message: string | ReactNode;
+  content: string | ReactNode;
+  thread_id?: string;
   created_at?: string;
 }

@@ -17,7 +17,7 @@ const Message = ({ message }: Props) => {
 
         <Stack>
           <Typography variant="subtitle2">Andrea</Typography>
-          {message.message}
+          {message.content}
         </Stack>
       </Stack>
     );
@@ -31,7 +31,7 @@ const Message = ({ message }: Props) => {
 
       <Stack flexGrow={1}>
         <Typography variant="subtitle2">Copebot</Typography>
-        {message.message}
+        {message.content}
       </Stack>
     </Stack>
   );

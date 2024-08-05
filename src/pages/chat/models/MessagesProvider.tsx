@@ -1,11 +1,12 @@
-import { createContext, FormEvent, ReactNode } from "react";
+import { createContext, FormEvent, ReactNode, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@lib/api";
 import { MessageDto } from "./MessageDto";
 
 const USER_ID = "user_id";
-const CHAT_ID = "default";
+const USER_SAP_ID = 2;
+// const CHAT_ID = "default";
 
 interface MessagesContextValue {
   messages: MessageDto[];
@@ -24,20 +25,24 @@ interface Props {
 }
 
 export const MessagesProvider = ({ children }: Props) => {
-  // const [messages, setMessages] = useState<MessageDto[]>([]);
+  const [threadId, setThreadId] = useState<string | null>(
+    () => localStorage.getItem("thread_id") || null
+  );
   const queryClient = useQueryClient();
 
   const query = useQuery({
-    queryKey: ["messages", CHAT_ID],
+    queryKey: ["messages", threadId],
     queryFn: async () => {
+      if (!threadId) return [];
+
       const params = new URLSearchParams();
 
       params.append("user_id", USER_ID);
-      params.append("chat_id", CHAT_ID);
+      params.append("thread_id", threadId);
 
-      const { data } = await api.get("/messages", { params });
+      const { data } = await api.get("/assistant/messages", { params });
 
-      return data.messages as MessageDto[];
+      return data as MessageDto[];
     },
   });
 
@@ -45,7 +50,7 @@ export const MessagesProvider = ({ children }: Props) => {
 
   const setMessages = (newMessage: MessageDto) => {
     queryClient.setQueryData(
-      ["messages", CHAT_ID],
+      ["messages", threadId],
       (prev: MessageDto[] | undefined) => {
         if (!prev) {
           return prev;
@@ -58,16 +63,11 @@ export const MessagesProvider = ({ children }: Props) => {
 
   const mutation = useMutation({
     mutationFn: async (message: string) => {
-      const history = messages.map((message) => ({
-        role: message.role,
-        content: message.message,
-      }));
-
-      const { data } = await api.post("/messages", {
+      const { data } = await api.post("/assistant/messages", {
         user_id: USER_ID,
-        chat_id: CHAT_ID,
-        history,
-        user_question: message,
+        user_sap_id: USER_SAP_ID,
+        thread_id: threadId,
+        content: message,
       });
 
       return data as MessageDto;
@@ -82,13 +82,18 @@ export const MessagesProvider = ({ children }: Props) => {
 
     setMessages({
       role: "user",
-      message,
+      content: message,
       created_at: new Date().toISOString(),
     });
 
     const reply = await mutation.mutateAsync(message);
 
     setMessages(reply);
+
+    if (!threadId) {
+      setThreadId(reply.thread_id!);
+      localStorage.setItem("thread_id", reply.thread_id!);
+    }
   };
 
   const value = {
