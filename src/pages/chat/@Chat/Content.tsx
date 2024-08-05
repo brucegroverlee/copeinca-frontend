@@ -15,6 +15,9 @@ const ScrollableStack = styled(Stack)(({ theme }) => ({
   padding: theme.spacing(2),
   paddingTop: "56px",
   gap: theme.spacing(2),
+  [theme.breakpoints.up("sm")]: {
+    paddingTop: "64px",
+  },
 }));
 
 export const Content = () => {
